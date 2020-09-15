@@ -28,11 +28,6 @@ public class AuthenticationController {
 	@Autowired
 	private JwtUtil jwtTokenUtil;
 	
-	@GetMapping("/hello")
-	public String hello() {
-		return "Hello World";
-	}
-	
 	@PostMapping("/authenticate")
 	public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
 		try {
@@ -47,16 +42,6 @@ public class AuthenticationController {
 		final String jwt = jwtTokenUtil.generateToken(userDetails);
 		
 		return ResponseEntity.ok(new AuthenticationResponse(jwt)); 
-	}
-	
-	@GetMapping("/employees")
-	public String helloEmployees() {
-		return "Hello World frome Employees";
-	}
-	
-	@GetMapping("/admins")
-	public String helloAdmins() {
-		return "Hello World from Admins";
 	}
 	
 }
