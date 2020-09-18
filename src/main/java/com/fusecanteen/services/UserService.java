@@ -41,6 +41,11 @@ public class UserService {
 	public FuseUser saveUser(FuseUser user) {
 		
 		LOG.info("Saving user.");
+		Optional<FuseUser> tempUser = userRepository.findById(user.getId());
+		FuseUser tempUser2 = userRepository.findByEmail(user.getEmail());
+		if(tempUser.isPresent() || tempUser2 != null) {
+			return null;
+		}
 		return userRepository.save(user);
 	}
 
@@ -49,7 +54,7 @@ public class UserService {
 		LOG.info("Updating user with ID: {}.", userId);
 		Optional<FuseUser> oldUser = userRepository.findById(userId);
 		
-		if(oldUser== null) {
+		if(oldUser.isEmpty()) {
 			userRepository.save(user);
 			return user;
 		}
@@ -58,10 +63,15 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-	public void deleteUserById(Long userId) {
+	public FuseUser deleteUserById(Long userId) {
 		
 		LOG.info("Deleting user with ID: {}.", userId);
-		userRepository.deleteById(userId);
+		Optional<FuseUser> user = userRepository.findById(userId);
+		if(user.isPresent()) {
+			userRepository.deleteById(userId);
+			return user.get();
+		}
+		return null;
 	}
 	
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fusecanteen.domain.FuseUser;
+import com.fusecanteen.domain.MessageResponse;
 import com.fusecanteen.services.UserService;
 
 @RestController
@@ -44,10 +45,15 @@ public class UserController {
 	}
 	
 	@PostMapping("/users") 
-	public ResponseEntity<FuseUser> saveUser(@RequestBody FuseUser user){
+	public ResponseEntity<?> saveUser(@RequestBody FuseUser user){
 		
 		FuseUser newUser = userService.saveUser(user);
-		return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+		if(newUser !=null) {
+			return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+		}
+		return  ResponseEntity.badRequest()
+				.body(new MessageResponse("Error: User with id/email already exists!"));
+		
 	}
 	
 	@PutMapping("/users/{userId}") 
@@ -58,10 +64,14 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/users")
-	public ResponseEntity<HttpStatus>  deleteUser(@PathVariable Long userId) {
+	public ResponseEntity<?>  deleteUser(@PathVariable Long userId) {
 		
-		userService.deleteUserById(userId);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		FuseUser user = userService.deleteUserById(userId);
+		if(user !=null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return  ResponseEntity.badRequest()
+				.body(new MessageResponse("Error: User with id doesn't exists!"));
 	}
 }
 
