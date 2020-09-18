@@ -9,7 +9,6 @@ import com.fusecanteen.domain.FuseUser;
 @Repository
 public interface UserRepository extends MongoRepository<FuseUser, Long>{
 
-	@Query("{email : ?0}")
-	FuseUser findByUserEmail(String email);
+	public FuseUser findByEmail(String email);
 	
 }

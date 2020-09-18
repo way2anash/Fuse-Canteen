@@ -74,7 +74,7 @@ public class OrderController {
 	}
 	
 	@GetMapping("/ordersHistory/{userId}")
-	public ResponseEntity<List<Order>> findAllOrdersByUserId (Long userId) {
+	public ResponseEntity<List<Order>> findAllOrdersByUserId (@PathVariable Long userId) {
 		
 		List<Order> order = orderService.findAllOrderByUserId(userId);
 		if(order.isEmpty()) {
@@ -86,7 +86,8 @@ public class OrderController {
 		return new ResponseEntity<>(order, HttpStatus.OK);
 		
 	}
-		
+	
+
 }
 
 

@@ -12,11 +12,9 @@ import com.fusecanteen.domain.Food;
 @Repository
 public interface FoodRepository extends MongoRepository<Food, Long>{
 
-	@Query("{name : ?0}")
-	Food findByName(String foodName);
+	public Food findByName(String foodName);
 	
-	@Query("{isPreparedToday : ?0}")
-	List<Food> findFoodByIsPreparedToday(Boolean b);
+	public List<Food> findByIsPreparedToday(Boolean b);
 	
 	
 }

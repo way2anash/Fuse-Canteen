@@ -17,7 +17,7 @@ public class UserService {
 	
 	public FuseUser findUserByEmail(String email) {
 		
-		return userRepository.findByUserEmail(email);
+		return userRepository.findByEmail(email);
 	}
 
 	public List<FuseUser> findAllUsers() {

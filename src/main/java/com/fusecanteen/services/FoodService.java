@@ -70,7 +70,7 @@ public class FoodService {
 	//Methods for Prepared Today Food list
 	public List<Food> findAllPreparedTodayFood() {
 		
-		return foodRepository.findFoodByIsPreparedToday(true);
+		return foodRepository.findByIsPreparedToday(true);
 	}
 
 	public List<Food> addItemToPreparedToday(List<String> items) {

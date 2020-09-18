@@ -10,7 +10,7 @@ import com.fusecanteen.domain.Order;
 
 @Repository
 public interface OrderRepository extends MongoRepository<Order, Long> {
-
-	@Query("{userId : ?0}")
-	List<Order> findOrderByUserId(Long userId);
+	
+	@Query(value = "{userId : ?0}", sort = "{createdDate : -1}")
+	public List<Order> findByUserId(Long userId);
 }
