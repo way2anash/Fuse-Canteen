@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fusecanteen.domain.Food;
+import com.fusecanteen.domain.MessageResponse;
 import com.fusecanteen.services.FoodService;
 
 @RestController
@@ -46,14 +47,16 @@ public class FoodController {
 	}
 
 	@PostMapping("/foods")
-	public ResponseEntity<Food> createFoodItem(@RequestBody Food food) {
+	public ResponseEntity<?> createFoodItem(@RequestBody Food food) {
 
-		try {
+		
 			Food newFood = foodService.saveFood(food);
-			return new ResponseEntity<>(newFood, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+			if(newFood != null) {
+				return new ResponseEntity<>(newFood, HttpStatus.CREATED);
+			}
+			return  ResponseEntity.badRequest()
+					.body(new MessageResponse("Error: Food Id is already exists!"));
+		
 	}
 
 	@GetMapping("/foods/popularFood")
@@ -74,15 +77,15 @@ public class FoodController {
 	}
 
 	@DeleteMapping("/foods/{foodId}")
-	public ResponseEntity<HttpStatus> deleteFoodById(@PathVariable Long foodId) {
+	public ResponseEntity<?> deleteFoodById(@PathVariable Long foodId) {
 
-		try {
-
-			foodService.deleteFoodById(foodId);
+		Food deletedFood = foodService.deleteFoodById(foodId);
+		if(deletedFood !=null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+			
+		return  ResponseEntity.badRequest()
+				.body(new MessageResponse("Error: Food Id is doesn exists!"));
 	}
 
 	// Methods for Prepared Today Food list
@@ -107,26 +110,24 @@ public class FoodController {
 	}
 	
 	@DeleteMapping("/preparedToday/{foodId}")
-	public ResponseEntity<HttpStatus> removeItemFromPreparedFoodToday(@PathVariable Long foodId) {
-		try {
+	public ResponseEntity<?> removeItemFromPreparedFoodToday(@PathVariable Long foodId) {
+		
 
-			foodService.removeItemFromPreparedFoodToday(foodId);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+			Food food = foodService.removeItemFromPreparedFoodToday(foodId);
+			if(food !=null) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			
+			return  ResponseEntity.badRequest()
+					.body(new MessageResponse("Error: Food Id is doesn exists!"));
 	}
 	
 	@DeleteMapping("/preparedToday")
 	public ResponseEntity<HttpStatus> removeAllItemFromPreparedToday() {
 
-		try {
-
 			foodService.removeAllItemFromPreparedToday();
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		
 	}
 
 

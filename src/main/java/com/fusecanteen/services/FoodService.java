@@ -25,6 +25,10 @@ public class FoodService {
 	public Food saveFood(Food food) {
 
 		LOG.info("Saving food.");
+		Optional<Food> tempFood = foodRepository.findById(food.getId());
+		if(tempFood.isPresent()) {
+			return null;
+		}
 		return foodRepository.save(food);
 	}
 
@@ -72,10 +76,16 @@ public class FoodService {
 		return saveFood(food);
 	}
 
-	public void deleteFoodById(Long foodId) {
+	public Food deleteFoodById(Long foodId) {
 
 		LOG.info("Deleting food with ID: {}.", foodId);
-		foodRepository.deleteById(foodId);
+		Optional<Food> tempFood = foodRepository.findById(foodId);
+		if(tempFood.isPresent()) {
+			foodRepository.deleteById(foodId);
+			return tempFood.get();
+		}
+		
+		return null;
 
 	}
 
@@ -106,6 +116,9 @@ public class FoodService {
 		
 		LOG.info("Removing food from prepared foods today with ID: {}.", foodId);
 		Optional<Food> food = foodRepository.findById(foodId);
+		if(food.get().getIsPreparedToday().equals(false)) {
+			return null;
+		}
 		food.get().setIsPreparedToday(false);
 		return foodRepository.save(food.get());
 	}
