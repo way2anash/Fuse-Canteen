@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fusecanteen.domain.MessageResponse;
 import com.fusecanteen.domain.Order;
 import com.fusecanteen.services.OrderService;
 
@@ -46,12 +47,9 @@ public class OrderController {
 	@PostMapping("/orders")
 	public ResponseEntity<Order> createOrder(@RequestBody Order order) {
 
-		try {
 			Order savedOrder = orderService.saveOrder(order);
 			return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		
 	}	
 	
 	@PutMapping("/orders/{orderId}")
@@ -63,14 +61,16 @@ public class OrderController {
 	}
 	
 	@DeleteMapping("/orders/{orderId}")
-	public ResponseEntity<HttpStatus> DeleteOrder(@PathVariable Long orderId) {
+	public ResponseEntity<?> DeleteOrder(@PathVariable Long orderId) {
 
-		try {
-			orderService.deleteOrder(orderId);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		
+			Order order = orderService.deleteOrder(orderId);
+			if(order !=null) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			
+			return  ResponseEntity.badRequest()
+					.body(new MessageResponse("Error: Order Id is doesnt exists!"));
 	}
 	
 	@GetMapping("/ordersHistory/{userId}")

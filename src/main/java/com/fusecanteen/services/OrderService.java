@@ -76,9 +76,15 @@ public class OrderService {
 		return orderRepository.save(order);
 	}
 	
-	public void deleteOrder(Long orderId) {
+	public Order deleteOrder(Long orderId) {
 		LOG.info("Deleting Order with ID: {}.", orderId);
-		orderRepository.deleteById(orderId);
+		Optional<Order> order = orderRepository.findById(orderId);
+		if(order.isPresent()) {
+			
+			orderRepository.deleteById(orderId);
+			return order.get();
+		}
+		return null;
 	}
 	
 	public float getTotalPrice(List<String> items) {
