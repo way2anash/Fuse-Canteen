@@ -85,7 +85,7 @@ public class FoodController {
 		}
 			
 		return  ResponseEntity.badRequest()
-				.body(new MessageResponse("Error: Food Id is doesn exists!"));
+				.body(new MessageResponse("Error: Food Id is doesn't exists!"));
 	}
 
 	// Methods for Prepared Today Food list
