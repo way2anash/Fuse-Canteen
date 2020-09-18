@@ -109,6 +109,19 @@ public class FoodService {
 		food.get().setIsPreparedToday(false);
 		return foodRepository.save(food.get());
 	}
+	
+	public void removeAllItemFromPreparedToday() {
+		
+		LOG.info("Removing All food items from prepared foods today");
+		List<Food> food = foodRepository.findAll();
+		List<Food> updateFood = new ArrayList<>();
+				for(Food f: food) {
+					f.setIsPreparedToday(false);
+					updateFood.add(f);
+				}
+				foodRepository.saveAll(updateFood);
+	}
+
 
 
 }

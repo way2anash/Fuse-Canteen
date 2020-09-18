@@ -105,7 +105,7 @@ public class FoodController {
 		List<Food> food = foodService.addItemToPreparedToday(items);
 		return new ResponseEntity<>(food, HttpStatus.CREATED);
 	}
-
+	
 	@DeleteMapping("/preparedToday/{foodId}")
 	public ResponseEntity<HttpStatus> removeItemFromPreparedFoodToday(@PathVariable Long foodId) {
 		try {
@@ -117,5 +117,17 @@ public class FoodController {
 		}
 	}
 	
+	@DeleteMapping("/preparedToday")
+	public ResponseEntity<HttpStatus> removeAllItemFromPreparedToday() {
+
+		try {
+
+			foodService.removeAllItemFromPreparedToday();
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 
 }
