@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +21,18 @@ public class ReviewService {
 	
 	private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
-	private final Logger log = org.slf4j.LoggerFactory.getLogger(ReviewService.class);
+	private final Logger LOG = LoggerFactory.getLogger(ReviewService.class);
 	
 	@Autowired
 	private FoodService foodService;
 
 	public Food addReview(Review review, Long foodId) {
 		
+		LOG.info("Adding Food Review to food id : ", foodId);
 		Optional<Food> food = foodService.findFoodById(foodId);
 		
 		if(food.isPresent()) {
-			log.info("Adding Foo Review...");
+			
 			List<Review> tempReview = 
 					(food.get().getReview()==null ? new ArrayList<Review>() : food.get().getReview() );
 			review.setCreatedDate(dateFormat.format(new Date()));
@@ -45,6 +47,7 @@ public class ReviewService {
 
 	public Food upateReviewById(Review review, Long foodId, Long reviewId) {
 		
+		LOG.info("updating Food Review to food id : ", foodId,", review id : ",reviewId);
 		Optional<Food> food = foodService.findFoodById(foodId);
 		
 		if(food.isPresent()) {
@@ -78,6 +81,7 @@ public class ReviewService {
 
 	public void deleteReviewById(Review review, Long foodId, Long reviewId) {
 		
+		LOG.info("Deleting Food Review to food id : ", foodId,", review id : ",reviewId);
 		Optional<Food> food = foodService.findFoodById(foodId);
 		
 		if(food.isPresent()) {
