@@ -19,7 +19,8 @@ public class Swagger2Configuration {
 		
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.paths(PathSelectors.ant("/api/*"))
+//				.paths(PathSelectors.ant("/api/*"))
+				.paths(PathSelectors.any())
 				.apis(RequestHandlerSelectors.basePackage("com.fusecanteen"))
 				.build()
 				.apiInfo(apiDetails());
